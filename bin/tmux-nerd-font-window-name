@@ -44,4 +44,4 @@ if [ "$SHOW_NAME" = true ]; then
 	fi
 fi
 
-echo "$ICON"
+echo $ICON
