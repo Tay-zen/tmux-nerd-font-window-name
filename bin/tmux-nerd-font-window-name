@@ -13,7 +13,7 @@ get_config_value() {
 	local value
 	if test -f "$USER_CONFIG"; then
 		value="$(yq "$key" "$USER_CONFIG")"
-		if [ "$value" == "null" ]; then # get default config value
+		if [ "$value" == "null" -o "$value" == "" ]; then # get default config value
 			value="$(yq "$key" "$DEFAULT_CONFIG")"
 		fi
 	else
@@ -24,7 +24,7 @@ get_config_value() {
 
 ICON="initial: $(get_config_value ".icons.\"$NAME\"") $ICON"
 
-if [ "$ICON" == "null" ]; then
+if [ "$ICON" == "null" -o "$ICON" == "" ]; then
 	FALLBACK_ICON="$(get_config_value '.config.fallback-icon')"
 	ICON="$FALLBACK_ICON"
 fi
@@ -32,14 +32,14 @@ fi
 if [ "$PANES" -gt 1 ]; then
 	MULTI_PANE_ICON="$(get_config_value '.config.multi-pane-icon')"
 	ICON="$MULTI_PANE_ICON $ICON"
-	if [ "$MULTI_PANE_ICON" != "null" ]; then # TODO != ""?
+	if [ "$MULTI_PANE_ICON" != "null" -a "$MULTI_PANE_ICON" != "" ]; then
 		ICON="multi: $MULTI_PANE_ICON $ICON"
 	fi
 fi
 
 SHOW_NAME="$(get_config_value '.config.show-name')"
 ICON="$SHOW_NAME $ICON"
-if [ "$SHOW_NAME" == true ]; then
+if [ "$SHOW_NAME" == true -o "$SHOW_NAME" == "true" -o "$SHOW_NAME" == "1" -o "$SHOW_NAME" == 1 ]; then
 	ICON_POSITION="$(get_config_value '.config.icon-position')"
 	if [ "$ICON_POSITION" == "right" ]; then
 		ICON="$NAME $ICON"
