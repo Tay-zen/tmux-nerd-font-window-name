@@ -22,6 +22,8 @@ get_config_value() {
 
 ICON="$(get_config_value ".icons.\"$NAME\"")"
 
+echo $ICON
+
 if [ "$ICON" == "null" ]; then
 	FALLBACK_ICON="$(get_config_value '.config.fallback-icon')"
 	ICON="$FALLBACK_ICON"
@@ -29,13 +31,15 @@ fi
 
 if [ "$PANES" -gt 1 ]; then
 	MULTI_PANE_ICON="$(get_config_value '.config.multi-pane-icon')"
-	if [ "$MULTI_PANE_ICON" != "null" ]; then
+	echo $MULTI_PANE_ICON
+	if [ "$MULTI_PANE_ICON" != "null" ]; then # TODO != ""?
 		ICON="$MULTI_PANE_ICON $ICON"
 	fi
 fi
+echo $ICON
 
 SHOW_NAME="$(get_config_value '.config.show-name')"
-if [ "$SHOW_NAME" = true ]; then
+if [ "$SHOW_NAME" == true ]; then
 	ICON_POSITION="$(get_config_value '.config.icon-position')"
 	if [ "$ICON_POSITION" == "right" ]; then
 		ICON="$NAME $ICON"
