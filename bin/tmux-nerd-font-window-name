@@ -6,6 +6,8 @@ CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEFAULT_CONFIG="$CURRENT_DIR/defaults.yml"
 USER_CONFIG="$HOME/.config/tmux/tmux-nerd-font-window-name.yml"
 
+ICON="$1 $2 $USER_CONFIG"
+
 get_config_value() {
 	local key=$1
 	local value
@@ -20,7 +22,7 @@ get_config_value() {
 	echo "$value"
 }
 
-ICON="initial: $(get_config_value ".icons.\"$NAME\"")"
+ICON="initial: $(get_config_value ".icons.\"$NAME\"") $ICON"
 
 if [ "$ICON" == "null" ]; then
 	FALLBACK_ICON="$(get_config_value '.config.fallback-icon')"
@@ -36,6 +38,7 @@ if [ "$PANES" -gt 1 ]; then
 fi
 
 SHOW_NAME="$(get_config_value '.config.show-name')"
+ICON="$SHOW_NAME $ICON"
 if [ "$SHOW_NAME" == true ]; then
 	ICON_POSITION="$(get_config_value '.config.icon-position')"
 	if [ "$ICON_POSITION" == "right" ]; then
